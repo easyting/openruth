@@ -28,6 +28,38 @@ function openruth_loan_list($account) {
 }
 
 /**
+ * Get a list of ILL loans.
+ *
+ * @param object $account
+ *   Current logged account, whose loans are to be fetched.
+ * @return DingProviderLoan
+ *   Array of objects, representing a collection of ILL's.
+ */
+function openruth_ill_list($account) {
+  $creds = ding_user_get_creds($account);
+  $result = array();
+  $status = _openruth_user_status($creds);
+
+  if (isset($status->illOrders->illOrder)) {
+    foreach ($status->illOrders->illOrder as $illOrder) {
+      $result[$illOrder->orderId] = new DingProviderLoan($illOrder->orderId, array(
+        'ding_entity_id' => variable_get('ting_agency', '') . ':' . $illOrder->itemId,
+        'display_name' => $illOrder->itemDisplayTitle,
+        'loan_date' => $illOrder->orderDate,
+        'expiry' => $illOrder->orderLastInterestDate,
+        'renewable' => FALSE,
+        'materials_number' => $illOrder->orderId,
+        'author' => $illOrder->itemAuthor,
+        'title' => $illOrder->itemTitle,
+        'publication_year' => $illOrder->itemPublicationYear,
+      ));
+    }
+  }
+
+  return $result;
+}
+
+/**
  * Renew loans.
  */
 function openruth_loan_renew($account, $ids) {
