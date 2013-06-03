@@ -17,9 +17,9 @@ function openruth_loan_list($account) {
         'expiry' => $loan->loanReturnDate,
         'renewable' => $loan->loanRenewable == 'renewable',
         'materials_number' => $loan->copyId,
-        'author' => $loan->itemAuthor,
+        'author' => !empty($loan->itemAuthor) ? $loan->itemAuthor : '',
         'title' => $loan->itemTitle,
-        'publication_year' => $loan->itemPublicationYear,
+        'publication_year' => !empty($loan->itemPublicationYear) ? $loan->itemPublicationYear : '',
       ));
     }
   }
@@ -49,9 +49,9 @@ function openruth_ill_list($account) {
         'expiry' => $illOrder->orderLastInterestDate,
         'renewable' => FALSE,
         'materials_number' => $illOrder->orderId,
-        'author' => $illOrder->itemAuthor,
+        'author' => !empty($illOrder->itemAuthor) ? $illOrder->itemAuthor : '',
         'title' => $illOrder->itemTitle,
-        'publication_year' => $illOrder->itemPublicationYear,
+        'publication_year' => !empty($illOrder->itemPublicationYear) ? $illOrder->itemPublicationYear : '',
       ));
     }
   }
