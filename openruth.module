@@ -31,6 +31,10 @@ function openruth_ding_provider() {
         'prefix' => 'loan',
         'file' => drupal_get_path('module', 'openruth') . '/openruth.loan.inc',
       ),
+      'ill' => array(
+        'prefix' => 'ill',
+        'file' => drupal_get_path('module', 'openruth') . '/openruth.loan.inc',
+      ),
       'debt' => array(
         'prefix' => 'debt',
         'file' => drupal_get_path('module', 'openruth') . '/openruth.debt.inc',
