@@ -20,6 +20,7 @@ function openruth_loan_list($account) {
         'author' => !empty($loan->itemAuthor) ? $loan->itemAuthor : '',
         'title' => $loan->itemTitle,
         'publication_year' => !empty($loan->itemPublicationYear) ? $loan->itemPublicationYear : '',
+        'notes' => '',
       ));
     }
   }
