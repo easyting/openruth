@@ -223,7 +223,6 @@ function openruth_client_invoke($method) {
   }
   catch (Exception $e) {
     timer_stop('openruth');
-    //watchdog('openruth', '@method error: “@message”', array('@method' => $method, '@message' => $e->getMessage()), WATCHDOG_ERROR);
     watchdog_exception('openruth', $e);
     return NULL;
   }
