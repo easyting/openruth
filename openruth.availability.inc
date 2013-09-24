@@ -13,6 +13,41 @@ function openruth_availability_holdings($provider_ids) {
 }
 
 /**
+ * Implements provider availability_availability.
+ */
+function openruth_availability_availability($provider_ids) {
+  $availability = array();
+  $holdings = openruth_client_invoke('get_holdings', $provider_ids);
+
+  foreach ($holdings->holding as $item) {
+    $reservable = FALSE;
+    $available = FALSE;
+    $id = $item->itemId;
+
+    if (empty($item->itemHoldings)) {
+      $availability[$id] = array(
+        'local_id' => $id,
+        'available' => $available,
+        'reservable' => $reservable,
+      );
+      continue;
+    }
+
+    $available = $item->agencyHoldings->itemAvailability ==
+      'copies available for loan and reservation';
+    $reservable = $available || $item->agencyHoldings->itemAvailability ==
+      'no copies available, but item can be reserved';
+
+    $availability[$id] = array(
+      'local_id' => $id,
+      'available' => $available,
+      'reservable' => $reservable,
+    );
+  }
+  return $availability;
+}
+
+/**
  * @param $res; a json encoded response from openruth-client (get_holdings)
  * @return mixed; an array with holding-information OR an errorstring OR FALSE
  */
