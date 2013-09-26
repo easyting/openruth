@@ -21,6 +21,7 @@ function openruth_availability_availability($provider_ids) {
 
   foreach ($holdings->holding as $item) {
     $id = $item->itemId;
+    $availability_text = NULL;
 
     // For service version 1.0.
     if (!empty($item->agencyHoldings->itemAvailability)) {
