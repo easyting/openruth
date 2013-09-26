@@ -20,22 +20,22 @@ function openruth_availability_availability($provider_ids) {
   $holdings = openruth_client_invoke('get_holdings', $provider_ids);
 
   foreach ($holdings->holding as $item) {
-    $reservable = FALSE;
-    $available = FALSE;
     $id = $item->itemId;
+    $availability_text = NULL;
 
-    if (empty($item->itemHoldings)) {
-      $availability[$id] = array(
-        'local_id' => $id,
-        'available' => $available,
-        'reservable' => $reservable,
-      );
-      continue;
+    // For service version 1.0.
+    if (!empty($item->agencyHoldings->itemAvailability)) {
+      $availability_text = $item->agencyHoldings->itemAvailability;
+    }
+    // For service version 1.1.
+    if (!empty($item->holdingAgency[0]->agencyHoldings)) {
+      $availability_text = $item->holdingAgency[0]->agencyHoldings
+        ->itemAvailability;
     }
 
-    $available = $item->agencyHoldings->itemAvailability ==
+    $available = $availability_text ==
       'copies available for loan and reservation';
-    $reservable = $available || $item->agencyHoldings->itemAvailability ==
+    $reservable = $available || $availability_text ==
       'no copies available, but item can be reserved';
 
     $availability[$id] = array(
