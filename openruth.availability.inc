@@ -42,6 +42,7 @@ function openruth_availability_availability($provider_ids) {
       'local_id' => $id,
       'available' => $available,
       'reservable' => $reservable,
+      'show_reservation_button' => $reservable,
     );
   }
   return $availability;
