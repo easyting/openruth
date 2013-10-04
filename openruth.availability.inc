@@ -13,6 +13,13 @@ function openruth_availability_holdings($provider_ids) {
 }
 
 /**
+ * Implements provider availability issues.
+ */
+function openruth_availability_issues($provider_ids) {
+  return openruth_availability_holdings($provider_ids);
+}
+
+/**
  * Implements provider availability_availability.
  */
 function openruth_availability_availability($provider_ids) {

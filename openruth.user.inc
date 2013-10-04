@@ -11,39 +11,40 @@ function openruth_user_authenticate($name, $pass) {
 
   if (is_string($res)) {
     watchdog('openruth', 'Error in user_check: @error', array('@error' => $res), WATCHDOG_ERROR);
-    throw new DingProviderAuthException();
-    // return $return;
+    throw new DingProviderAuthException($res);
   }
   elseif (!$res || !$res->userFound || !$res->userPinCodeOk) {
     // No reply or not found.
-    throw new DingProviderAuthException();
-    //return $return;
+    throw new DingProviderAuthException('User not found or incorrect password.');
+  }
+  elseif ($res->userBlocked) {
+    throw new DingProviderUserException('User is blocked');
   }
 
-  if ($res->userBlocked) {
-    // @todo Tell the user...
-  }
-
-  $return['success'] = TRUE;
   $return['creds'] = array(
     'name' => $name,
     'pass' => $pass,
   );
 
   $userStatus = _openruth_user_status($return['creds'], TRUE);
-  if ($userStatus && isset($userStatus->userInfo)) {
+
+  if (is_string($userStatus)) {
+    throw new DingProviderAuthException('Could not fetch user data. Temporary service issue.');
+  }
+  elseif (is_object($userStatus) && isset($userStatus->userInfo)) {
     $userInfo = $userStatus->userInfo;
     $return['user'] = array(
       'data' => array(
         'display_name' => $userInfo->userFirstName . ' ' . $userInfo->userLastName,
       ),
     );
-
     $return['private']['userinfo'] = $userInfo;
 
     if (isset($userInfo->userEmail)) {
       $return['user']['mail'] = $userInfo->userEmail;
     }
+
+    $return['success'] = TRUE;
   }
 
   return $return;

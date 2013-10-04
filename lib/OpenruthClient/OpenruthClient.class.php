@@ -47,6 +47,7 @@ class OpenruthClient {
     if (variable_get('openruth_enable_logging', FALSE)) {
       $this->logging = TRUE;
       $options['trace'] = TRUE;
+      $options['exceptions'] = TRUE;
     }
     $this->client = new SoapClient($this->wsdl_url, $options);
     self::$salt = rand();
