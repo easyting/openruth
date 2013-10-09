@@ -33,9 +33,24 @@ function openruth_user_authenticate($name, $pass) {
   $userStatus = _openruth_user_status($return['creds'], TRUE);
   if ($userStatus && isset($userStatus->userInfo)) {
     $userInfo = $userStatus->userInfo;
+
+    $display_name = NULL;
+    if (!empty($userInfo->userFirstName)) {
+      $display_name = $userInfo->userFirstName;
+    }
+    if (!empty($userInfo->userLastName)) {
+      $display_name = ' ' . $userInfo->userLastName;
+    }
+    $display_name = trim($display_name);
+
+    // @todo Need a default value if both first and last name are empty.
+    // if (empty($display_name)) {
+    //   $display_name = t('User');
+    // }
+
     $return['user'] = array(
       'data' => array(
-        'display_name' => $userInfo->userFirstName . ' ' . $userInfo->userLastName,
+        'display_name' => $display_name,
       ),
     );
 

@@ -40,12 +40,12 @@ function openruth_reservation_list($account) {
           'pickup_date' => (!empty($res->orderPickUpDate)) ? $res->orderPickUpDate : NULL,
           // Only items that has been set aside for the user has a pickup order ID. Also, not all libraries use it.
           'pickup_order_id' => (!empty($res->orderPickUpId)) ? $res->orderPickUpId : NULL,
-          'pickup_branch_id' => $res->agencyCounter,
-          'order_arrived' => $res->orderArrived,
-          'created' => $res->orderDate,
-          'author' => $res->itemAuthor,
-          'title' => $res->itemTitle,
-          'publication_year' => $res->itemPublicationYear,
+          'pickup_branch_id' => !empty($res->agencyCounter) ? $res->agencyCounter : NULL,
+          'order_arrived' => !empty($res->orderArrived) ? $res->orderArrived : NULL,
+          'created' => !empty($res->orderDate) ? $res->orderDate : NULL,
+          'author' => !empty($res->itemAuthor) ? $res->itemAuthor : NULL,
+          'title' => !empty($res->itemTitle) ? $res->itemTitle : NULL,
+          'publication_year' => !empty($res->itemPublicationYear) ? $res->itemPublicationYear : NULL,
           'ready_for_pickup' => 1,
           'notes' => isset($res->itemSerialPartTitle) ? $res->itemSerialPartTitle : '',
         ));
