@@ -47,7 +47,7 @@ function openruth_reservation_list($account) {
           'title' => !empty($res->itemTitle) ? $res->itemTitle : NULL,
           'publication_year' => !empty($res->itemPublicationYear) ? $res->itemPublicationYear : NULL,
           'ready_for_pickup' => 1,
-          'notes' => isset($res->itemSerialPartTitle) ? $res->itemSerialPartTitle : '',
+          'notes' => isset($res->itemSerialPartTitle) ? $res->itemSerialPartTitle : NULL,
         ));
       }
     }

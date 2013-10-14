@@ -320,10 +320,12 @@ function openruth_profile2_presave($profile2) {
   }
 
   // mobile phone
-  if (!empty($profile2->original->field_openruth_mobile_phone[$langs['field_openruth_mobile_phone']])) {
+  $has_mobile_field = !empty($profile2->original->field_openruth_mobile_phone) &&
+    !empty($profile2->original->field_openruth_mobile_phone[$langs['field_openruth_mobile_phone']]);
+  if ($has_mobile_field) {
     if (isset($profile2->field_openruth_mobile_phone[$langs['field_openruth_mobile_phone']][0]['value'])) {
       if ($profile2->field_openruth_mobile_phone[$langs['field_openruth_mobile_phone']][0]['value'] !=
-	   $profile2->original->field_openruth_mobile_phone[$langs['field_openruth_mobile_phone']][0]['value']) {
+        $profile2->original->field_openruth_mobile_phone[$langs['field_openruth_mobile_phone']][0]['value']) {
         $changes['mobile_phone'] = $profile2->field_openruth_mobile_phone[$langs['field_openruth_mobile_phone']][0]['value'];
       }
     }
@@ -580,6 +582,7 @@ function _openruth_user_status($creds = NULL, $reset = FALSE) {
 
   if (!isset($_SESSION['openruth_user_status'][$id]) || $_SESSION['openruth_user_status'][$id]['time'] < (REQUEST_TIME - 300)) {
     $status = openruth_client_invoke('user_status', $creds['name'], $creds['pass']);
+
     if ($status && !is_string($status)) {
       if (isset($status->userInfo) && isset($status->userInfo->userPinCode)) {
         // Don't cache user pass.
@@ -592,7 +595,7 @@ function _openruth_user_status($creds = NULL, $reset = FALSE) {
     }
     elseif (is_string($status)) {
       watchdog('openruth', 'Error fetching user status @error', array('@error' => $status), WATCHDOG_ERROR);
-      return;
+      return $status;
     }
   }
   if ($_SESSION['openruth_user_status'][$id]) {
