@@ -76,21 +76,9 @@ class OpenruthClient {
         $time = round(microtime(TRUE) - $this->log_timestamp, 2);
         $this->log_timestamp = NULL;
       }
-      $sensitive = func_get_args();
-      // For some reason PHP doesn't have array_flatten, and this is the
-      // shortest alternative.
-      $replace_values = array();
-      foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($sensitive)) as $value) {
-        $replace_values['>' . $value . '<'] = '>' . substr(md5($value . self::$salt), 0, strlen($value)) . '<';
-      }
       if (isset($time)) {
-        watchdog('openruth', 'Sending request (@seconds sec): @xml', array('@xml' => strtr($this->client->__getLastRequest(), $replace_values), '@seconds' => $time), WATCHDOG_DEBUG);
-
+        watchdog('openruth', 'Sending request (@seconds sec).', array('@seconds' => $time), WATCHDOG_DEBUG);
       }
-      else {
-        watchdog('openruth', 'Sending request: @xml', array('@xml' => strtr($this->client->__getLastRequest(), $replace_values)), WATCHDOG_DEBUG);
-      }
-      watchdog('openruth', 'Response: @xml', array('@xml' => strtr($this->client->__getLastResponse(), $replace_values)), WATCHDOG_DEBUG);
     }
   }
 
