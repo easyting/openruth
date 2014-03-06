@@ -18,7 +18,7 @@ function openruth_loan_list($account) {
         'renewable' => $loan->loanRenewable == 'renewable',
         'materials_number' => $loan->copyId,
         'author' => !empty($loan->itemAuthor) ? $loan->itemAuthor : '',
-        'title' => $loan->itemTitle,
+        'title' => $loan->itemDisplayTitle,
         'publication_year' => !empty($loan->itemPublicationYear) ? $loan->itemPublicationYear : '',
         'notes' => '',
       ));
